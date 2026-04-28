@@ -1,0 +1,36 @@
+<div class="sidebar text-white p-3">
+    <h5 class="mb-4 text-center">SaludYa</h5>
+    <ul class="nav flex-column">
+        <li class="nav-item mb-2">
+            <a class="nav-link text-white" routerLink="/home/perfil">
+                👤 Perfil
+            </a>
+        </li>
+        <ng-container *ngIf="rol === 'paciente'">
+            <li class="nav-item mb-2">
+                <a class="nav-link text-white" routerLink="/home/agendar">
+                    🦷 Agendar cita
+                </a>
+            </li>
+        </ng-container>
+        <ng-container *ngIf="rol === 'medico'">
+            <li class="nav-item mb-2">
+                <a class="nav-link text-white" routerLink="/home/citas-medico">
+                    🦷 Citas agendadas
+                </a>
+            </li>
+        </ng-container>
+        <ng-container *ngIf="rol === 'paciente'">
+            <li class="nav-item mb-2">
+                <a class="nav-link text-white" routerLink="/home/citas">
+                    📅 Citas agendadas
+                </a>
+            </li>
+        </ng-container>
+        <li class="nav-item mt-4">
+            <a class="nav-link text-white" (click)="logout()">
+                🚪 Cerrar sesión
+            </a>
+        </li>
+    </ul>
+</div>

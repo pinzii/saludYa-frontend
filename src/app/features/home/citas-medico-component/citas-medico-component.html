@@ -1,0 +1,49 @@
+<div class="container">
+    <h3>Mis citas</h3>
+
+    <div class="card p-4 shadow-sm mt-3 border-0">
+
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>Paciente</th>
+                    <th>Especialidad</th>
+                    <th>Fecha</th>
+                    <th>Hora</th>
+                    <th>Sede</th>
+                    <th>Estado</th>
+                    <th></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr *ngFor="let cita of citas">
+                    <td>{{ cita.paciente }}</td>
+                    <td>{{ cita.especialidad }}</td>
+                    <td>{{ cita.fecha }}</td>
+                    <td>{{ cita.hora }}</td>
+                    <td>{{ cita.sede }}</td>
+
+                    <td>
+                        <span class="badge" [ngClass]="{
+            'bg-success': cita.estado === 'Confirmada',
+            'bg-warning text-dark': cita.estado === 'Pendiente',
+            'bg-danger': cita.estado === 'Cancelada'
+          }">
+                            {{ cita.estado }}
+                        </span>
+                    </td>
+
+                    <td>
+                        <button class="btn btn-sm btn-primary me-2">
+                            Ver
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger">
+                            Cancelar
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

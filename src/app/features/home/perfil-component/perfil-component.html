@@ -1,0 +1,39 @@
+<div class="container">
+    <h3>Mi perfil</h3>
+    <div class="card p-4 shadow-sm mt-3 border-0">    
+        <form  (ngSubmit)="actualizar()">
+            <div class="mb-3">
+                <label>Nombre</label>
+                <input class="form-control" [(ngModel)]="form.nombre" name="nombre">
+            </div>
+            <div class="mb-3">
+                <label>Email</label>
+                <input class="form-control" [(ngModel)]="form.email" name="email">
+            </div>
+            <div class="mb-3">
+                <label>Documento</label>
+                <input class="form-control" [(ngModel)]="form.documento" name="documento">
+            </div>
+            <div class="mb-3">
+                <label>Teléfono</label>
+                <input class="form-control" [(ngModel)]="form.telefono" name="telefono">
+            </div>
+            <div class="mb-3">
+                <label>Nueva contraseña</label>
+                <input type="password" class="form-control" [(ngModel)]="form.password" name="password">
+            </div>
+            <button class="btn btn-primary w-100" >
+                Guardar cambios
+            </button>
+            
+            <div *ngIf="mensaje" class="alert alert-success mt-3">
+                {{ mensaje }}
+            </div>
+            
+            <div *ngIf="error" class="alert alert-danger mt-3">
+                {{ error }}
+            </div>
+
+        </form>
+    </div>
+</div>

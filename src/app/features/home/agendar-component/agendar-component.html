@@ -1,0 +1,71 @@
+<div class="container">
+    <h3>Agendar cita</h3>
+
+    <div class="card p-4 shadow-sm mt-3 border-0">
+        <form (ngSubmit)="buscar()">
+            <div class="mb-3">
+                <label class="form-label">Especialidad</label>
+                <select class="form-select" [(ngModel)]="filtro.especialidad" name="especialidad">
+                    <option value="" disabled selected>Selecciona una especialidad</option>
+                    <option>Odontología general</option>
+                    <option>Ortodoncia</option>
+                    <option>Endodoncia</option>
+                    <option>Periodoncia</option>
+                    <option>Odontopediatría</option>
+                    <option>Cirugía oral</option>
+                    <option>Estética dental</option>
+                </select>
+            </div>
+
+
+            <div class="mb-3">
+                <label class="form-label">Fecha</label>
+                <input type="date" class="form-control" [(ngModel)]="filtro.fecha" name="fecha">
+            </div>
+
+
+            <div class="mb-3">
+                <label class="form-label">Observaciones</label>
+                <textarea class="form-control" rows="3" [(ngModel)]="filtro.observaciones" name="observaciones">
+                </textarea>
+            </div>
+
+
+            <div class="d-grid">
+                <button type="submit" class="btn btn-primary">
+                    Buscar disponibilidad
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+    <!-- RESULTADOS -->
+
+    <div class="card p-4 shadow-sm mt-4 border-0" *ngIf="resultados.length > 0">
+        <h5 class="mb-3">Horarios disponibles</h5>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Sede</th>
+                    <th>Hora</th>
+                    <th>Médico</th>
+                    <th></th>
+                </tr>
+            </thead>
+
+            <tbody>
+                <tr *ngFor="let item of resultados">
+                    <td>{{ item.sede }}</td>
+                    <td>{{ item.hora }}</td>
+                    <td>{{ item.medico }}</td>
+                    <td>
+                        <button class="btn btn-sm btn-primary">
+                            Seleccionar
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

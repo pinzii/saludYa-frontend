@@ -1,0 +1,29 @@
+/* You can add global styles to this file, and also import other style files */
+:root {
+  --bs-primary: #007300;
+}
+
+.btn-primary {
+  background-color: var(--bs-primary) !important;
+  border-color: var(--bs-primary) !important;
+}
+
+.btn-primary:hover {
+  background-color: #006b5a !important;
+  border-color: #006b5a !important;
+}
+
+/* Inputs focus */
+.form-control:focus {
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 0.2rem rgba(0, 124, 104, 0.25);
+}
+
+/* Links */
+a {
+  color: var(--primary-color);
+}
+
+a:hover {
+  color: #005f50;
+}
