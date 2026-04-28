@@ -46,30 +46,30 @@
         </div>
     </div>
 
-    <form (ngSubmit)="actualizar()">
+    <form (ngSubmit)="actualizar()" novalidate>
 
       <div class="mb-3">
         <label>Nombre y apellidos</label>
-        <input class="form-control" [(ngModel)]="form.nombre" name="nombre">
+        <input class="form-control" [(ngModel)]="form.nombre" name="nombre" required>
       </div>
 
       <div class="mb-3">
         <label>Documento de identidad</label>
-        <input class="form-control" [(ngModel)]="form.documento" name="documento">
+        <input class="form-control" [(ngModel)]="form.documento" name="documento" required>
       </div>
 
       <div class="mb-3">
         <label>Correo electrónico</label>
-        <input class="form-control" [(ngModel)]="form.email" name="email">
+        <input class="form-control" [(ngModel)]="form.email" name="email" required>
       </div>
 
       <div class="mb-3">
         <label>Teléfono</label>
-        <input class="form-control" [(ngModel)]="form.telefono" name="telefono">
+        <input class="form-control" [(ngModel)]="form.telefono" name="telefono" required>
       </div>
 
-      <button class="btn-update" type="submit">
-        Actualizar datos
+      <button class="btn-update" type="submit" >
+        {{ loading ? 'Actualizando...' : 'Actualizar datos' }}
       </button>
 
       <div *ngIf="mensaje" class="alert-success">

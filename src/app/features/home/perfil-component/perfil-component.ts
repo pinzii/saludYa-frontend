@@ -12,6 +12,7 @@ import { AuthService } from '../../auth/auth.service';
 })
 export class PerfilComponent {
 
+  sidebarOpen = true;
   id!: number;
 
   form = {
@@ -20,12 +21,6 @@ export class PerfilComponent {
     documento: '',
     telefono: ''
   };
-
-  sidebarOpen = true;
-
-  toggleSidebar() {
-  this.sidebarOpen = !this.sidebarOpen;
-  }
 
   loading = false;
   mensaje = '';
@@ -37,32 +32,32 @@ export class PerfilComponent {
     private cdr: ChangeDetectorRef
   ) {}
 
-  // ngOnInit() {
-  //   const userId = this.authService.getUserIdFromToken();
-
-  //   if (!userId) {
-  //     this.error = 'No se pudo identificar el usuario';
-  //     return;
-  //   }
-
-  //   this.id = userId;
-  //   this.cargarUsuario();
-  // }
-
   ngOnInit() {
-  this.id = this.authService.getUserIdFromToken()!;
-  console.log('ID del usuario:', this.id);
-  this.cargarUsuario();
+    const userId = this.authService.getUserIdFromToken();
+
+    if (!userId) {
+      this.error = 'No se pudo identificar el usuario';
+      return;
+    }
+
+    this.id = userId;
+    this.cargarUsuario();
   }
+
+  toggleSidebar() {
+    this.sidebarOpen = !this.sidebarOpen;
+  }
+
   cargarUsuario() {
-    this.loading = true;
+    this.loading = false;
+    this.error = null;
 
     this.usersService.getUser(this.id).subscribe({
       next: (user: any) => {
-        this.form.nombre = user.nombre;
-        this.form.email = user.email;
-        this.form.documento = user.documento;
-        this.form.telefono = user.telefono;
+        this.form.nombre = user.nombre || '';
+        this.form.email = user.email || '';
+        this.form.documento = user.documento || '';
+        this.form.telefono = user.telefono || '';
 
         this.loading = false;
         this.cdr.detectChanges();
@@ -70,14 +65,23 @@ export class PerfilComponent {
       error: () => {
         this.error = 'Error cargando usuario';
         this.loading = false;
+        this.cdr.detectChanges();
       }
     });
   }
 
   actualizar() {
-    this.loading = true;
+
+    console.log('click actualizar');
     this.mensaje = '';
     this.error = null;
+
+    if (!this.form.nombre.trim() || !this.form.email.trim() || !this.form.documento.trim() || !this.form.telefono.trim()) {
+      this.error = 'Completa todos los datos faltantes antes de actualizar';
+      return;
+    }
+
+    this.loading = true;
 
     const data = {
       nombre: this.form.nombre,
@@ -87,7 +91,12 @@ export class PerfilComponent {
     };
 
     this.usersService.updateUser(this.id, data).subscribe({
-      next: () => {
+      next: (user: any) => {
+        this.form.nombre = user.nombre || '';
+        this.form.email = user.email || '';
+        this.form.documento = user.documento || '';
+        this.form.telefono = user.telefono || '';
+
         this.mensaje = 'Datos actualizados correctamente';
         this.loading = false;
         this.cdr.detectChanges();
@@ -98,8 +107,9 @@ export class PerfilComponent {
         }, 3000);
       },
       error: (err) => {
-        this.error = err.error?.message || 'Error al actualizar';
+        this.error = err.error?.message || 'Error al actualizar los datos';
         this.loading = false;
+        this.cdr.detectChanges();
       }
     });
   }
