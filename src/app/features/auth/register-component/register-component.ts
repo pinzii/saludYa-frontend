@@ -11,29 +11,32 @@ import { FormsModule } from '@angular/forms';
 })
 export class RegisterComponent {
 
-  nombre = '';
-  email = '';
-  password = '';
-  password2 = '';
-  rol = 'paciente';
+  form = {
+    nombre: '',
+    email: '',
+    password: '',
+    password2: '',
+    rol: 'paciente'
+  };
 
   constructor(
     private authService: AuthService,
     private router: Router
-  ) { }
+  ) {}
 
   registrar() {
-
-    if (this.password != this.password2) {
-      alert("Contraseñas no coinciden");
+    if (this.form.password !== this.form.password2) {
+      alert('Las contraseñas no coinciden');
       return;
     }
+
     const data = {
-      nombre: this.nombre,
-      email: this.email,
-      password: this.password,
-      rol: this.rol
+      nombre: this.form.nombre,
+      email: this.form.email,
+      password: this.form.password,
+      rol: this.form.rol
     };
+
     this.authService.register(data).subscribe({
       next: () => {
         alert('Usuario registrado');
@@ -44,6 +47,4 @@ export class RegisterComponent {
       }
     });
   }
-
-
 }
