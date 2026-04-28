@@ -4,7 +4,7 @@ import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-home-component',
-  imports: [SidebarComponent,RouterModule],
+  imports: [RouterModule],
   templateUrl: './home-component.html',
   styleUrl: './home-component.css',
 })

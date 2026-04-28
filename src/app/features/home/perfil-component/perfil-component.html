@@ -1,39 +1,87 @@
-<div class="container">
-    <h3>Mi perfil</h3>
-    <div class="card p-4 shadow-sm mt-3 border-0">    
-        <form  (ngSubmit)="actualizar()">
-            <div class="mb-3">
-                <label>Nombre</label>
-                <input class="form-control" [(ngModel)]="form.nombre" name="nombre">
-            </div>
-            <div class="mb-3">
-                <label>Email</label>
-                <input class="form-control" [(ngModel)]="form.email" name="email">
-            </div>
-            <div class="mb-3">
-                <label>Documento</label>
-                <input class="form-control" [(ngModel)]="form.documento" name="documento">
-            </div>
-            <div class="mb-3">
-                <label>Teléfono</label>
-                <input class="form-control" [(ngModel)]="form.telefono" name="telefono">
-            </div>
-            <div class="mb-3">
-                <label>Nueva contraseña</label>
-                <input type="password" class="form-control" [(ngModel)]="form.password" name="password">
-            </div>
-            <button class="btn btn-primary w-100" >
-                Guardar cambios
-            </button>
-            
-            <div *ngIf="mensaje" class="alert alert-success mt-3">
-                {{ mensaje }}
-            </div>
-            
-            <div *ngIf="error" class="alert alert-danger mt-3">
-                {{ error }}
-            </div>
+<div class="profile-layout">
 
-        </form>
+  <aside class="sidebar" [class.collapsed]="!sidebarOpen">
+
+    <div class="sidebar-header">
+      <button type="button" class="toggle-btn" (click)="toggleSidebar()">
+        ☰
+      </button>
+
+      <span class="brand" *ngIf="sidebarOpen">
+        SaludYa
+      </span>
     </div>
+
+    <nav class="sidebar-menu">
+      <a class="menu-item active">
+        <span class="icon">👤</span>
+        <span *ngIf="sidebarOpen">Perfil</span>
+      </a>
+
+      <a class="menu-item">
+        <span class="icon">📅</span>
+        <span *ngIf="sidebarOpen">Citas</span>
+      </a>
+    </nav>
+
+    <button type="button" class="logout-btn">
+      <span class="icon">↪</span>
+      <span *ngIf="sidebarOpen">Salir</span>
+    </button>
+
+  </aside>
+
+  <main class="profile-content">
+
+    <div class="profile-header">
+        <div class="avatar">
+            {{ form.nombre ? form.nombre.charAt(0).toUpperCase() : 'U' }}
+        </div>
+
+        <div class="user-info">
+            <h3>Mi Perfil</h3>
+            <p class="user-email">
+            {{ form.email || 'Usuario de SaludYa' }}
+            </p>
+        </div>
+    </div>
+
+    <form (ngSubmit)="actualizar()">
+
+      <div class="mb-3">
+        <label>Nombre y apellidos</label>
+        <input class="form-control" [(ngModel)]="form.nombre" name="nombre">
+      </div>
+
+      <div class="mb-3">
+        <label>Documento de identidad</label>
+        <input class="form-control" [(ngModel)]="form.documento" name="documento">
+      </div>
+
+      <div class="mb-3">
+        <label>Correo electrónico</label>
+        <input class="form-control" [(ngModel)]="form.email" name="email">
+      </div>
+
+      <div class="mb-3">
+        <label>Teléfono</label>
+        <input class="form-control" [(ngModel)]="form.telefono" name="telefono">
+      </div>
+
+      <button class="btn-update" type="submit">
+        Actualizar datos
+      </button>
+
+      <div *ngIf="mensaje" class="alert-success">
+        {{ mensaje }}
+      </div>
+
+      <div *ngIf="error" class="alert-error">
+        {{ error }}
+      </div>
+
+    </form>
+
+  </main>
+
 </div>

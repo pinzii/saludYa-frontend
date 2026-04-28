@@ -12,38 +12,64 @@ import { AuthService } from '../../auth/auth.service';
 })
 export class PerfilComponent {
 
-  id = 1;
+  id!: number;
+
   form = {
     nombre: '',
     email: '',
     documento: '',
-    telefono: '',
-    password: ''
+    telefono: ''
   };
+
+  sidebarOpen = true;
+
+  toggleSidebar() {
+  this.sidebarOpen = !this.sidebarOpen;
+  }
 
   loading = false;
   mensaje = '';
   error: string | null = null;
 
-  constructor(private usersService: UsersService, private authService: AuthService, private cdr: ChangeDetectorRef) { }
+  constructor(
+    private usersService: UsersService,
+    private authService: AuthService,
+    private cdr: ChangeDetectorRef
+  ) {}
+
+  // ngOnInit() {
+  //   const userId = this.authService.getUserIdFromToken();
+
+  //   if (!userId) {
+  //     this.error = 'No se pudo identificar el usuario';
+  //     return;
+  //   }
+
+  //   this.id = userId;
+  //   this.cargarUsuario();
+  // }
 
   ngOnInit() {
-    this.id = this.authService.getUserIdFromToken()!;
-    this.cargarUsuario();
+  this.id = this.authService.getUserIdFromToken()!;
+  console.log('ID del usuario:', this.id);
+  this.cargarUsuario();
   }
-
   cargarUsuario() {
     this.loading = true;
+
     this.usersService.getUser(this.id).subscribe({
       next: (user: any) => {
         this.form.nombre = user.nombre;
         this.form.email = user.email;
         this.form.documento = user.documento;
         this.form.telefono = user.telefono;
+
+        this.loading = false;
         this.cdr.detectChanges();
       },
       error: () => {
         this.error = 'Error cargando usuario';
+        this.loading = false;
       }
     });
   }
@@ -51,27 +77,24 @@ export class PerfilComponent {
   actualizar() {
     this.loading = true;
     this.mensaje = '';
-    this.error = '';
-    const data: any = {
+    this.error = null;
+
+    const data = {
       nombre: this.form.nombre,
       email: this.form.email,
       documento: this.form.documento,
       telefono: this.form.telefono
     };
 
-    if (this.form.password) {
-      data.password = this.form.password;
-    }
-
     this.usersService.updateUser(this.id, data).subscribe({
       next: () => {
         this.mensaje = 'Datos actualizados correctamente';
-        this.form.password = '';
         this.loading = false;
         this.cdr.detectChanges();
+
         setTimeout(() => {
           this.mensaje = '';
-          this.cdr.detectChanges()
+          this.cdr.detectChanges();
         }, 3000);
       },
       error: (err) => {
@@ -80,5 +103,4 @@ export class PerfilComponent {
       }
     });
   }
-
 }
