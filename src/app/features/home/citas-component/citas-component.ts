@@ -1,16 +1,26 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+
 
 @Component({
   selector: 'app-citas-component',
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './citas-component.html',
   styleUrl: './citas-component.css',
 })
 export class CitasComponent {
   
   mensaje = '';
+  error = '';
   citas: any[] = [];
+  citaReagendando: any = null;
+  nuevaFecha = '';
+  nuevaHora = '';
+  fechaHoy = new Date().toISOString().split('T')[0];
+
+  
+
 
   ngOnInit() {
     this.cargarCitas();
@@ -114,5 +124,79 @@ export class CitasComponent {
     return this.citas.filter(cita => cita.estado === 'Cancelada');
   }
 
-  
+  citaSeleccionada: any = null;
+
+  verDetalle(cita: any) {
+    this.citaSeleccionada = cita;
+  }
+
+  cerrarDetalle() {
+    this.citaSeleccionada = null;
+  }  
+
+  reagendarCita(cita: any) {
+    if (cita.estado === 'Cancelada' || cita.estado === 'Completada') {
+      return;
+    }
+
+    this.citaReagendando = cita;
+
+    this.nuevaFecha = '';
+    this.nuevaHora = '';
+    this.error = '';
+  }
+
+  guardarReagendamiento() {
+
+    if (!this.nuevaFecha || !this.nuevaHora) {
+      this.error = 'Selecciona nueva fecha y hora';
+      return;
+    }
+
+    this.error = '';
+
+    if (this.nuevaFecha < this.fechaHoy) {
+      this.error = 'No puedes reagendar una cita a una fecha pasada';
+      return;
+    }
+
+    const citasGuardadas =
+      JSON.parse(localStorage.getItem('citas') || '[]');
+
+    const citasActualizadas =
+      citasGuardadas.map((cita: any) => {
+
+        if (cita.id === this.citaReagendando.id) {
+
+          return {
+            ...cita,
+            fecha: this.nuevaFecha,
+            hora: this.nuevaHora,
+            estado: 'Pendiente'
+          };
+
+        }
+
+        return cita;
+
+      });
+
+    localStorage.setItem('citas', JSON.stringify(citasActualizadas));
+
+    this.citas = citasActualizadas;
+
+    this.citaReagendando = null;
+
+    this.nuevaFecha = '';
+    this.nuevaHora = '';
+    this.error = ''; 
+    
+
+    this.mensaje = 'Cita reagendada correctamente';    
+
+    setTimeout(() => {
+      this.mensaje = '';
+    }, 3000);
+  }
+
 }

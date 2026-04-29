@@ -69,7 +69,7 @@
     {{ cita.estado }}
   </span>
 
-  <button class="btn-detail">
+  <button class="btn-detail" type="button" (click)="verDetalle(cita)">
     Ver detalle
   </button>
 
@@ -80,4 +80,95 @@
     [disabled]="cita.estado === 'Cancelada' || cita.estado === 'Completada'">
     {{ cita.estado === 'Cancelada' ? 'Cancelada' : cita.estado === 'Completada' ? 'Completada' : 'Cancelar' }}
   </button>
+
+  <button
+    class="btn-reschedule"
+    type="button"
+    (click)="reagendarCita(cita)"
+    [disabled]="cita.estado === 'Cancelada' || cita.estado === 'Completada'">
+    
+    {{
+      cita.estado === 'Cancelada'
+        ? 'Reagendar'
+        : cita.estado === 'Completada'
+        ? 'Completada'
+        : 'Reagendar'
+    }}
+  </button>
+
+  @if (citaSeleccionada) {
+    <div class="modal-backdrop">
+      <div class="detail-modal">
+        <h3>Detalle de la cita</h3>
+
+        <p><strong>Especialidad:</strong> {{ citaSeleccionada.especialidad }}</p>
+        <p><strong>Fecha:</strong> {{ citaSeleccionada.fecha }}</p>
+        <p><strong>Hora:</strong> {{ citaSeleccionada.hora }}</p>
+        <p><strong>Médico:</strong> {{ citaSeleccionada.medico }}</p>
+        <p><strong>Sede:</strong> {{ citaSeleccionada.sede }}</p>
+        <p><strong>Estado:</strong> {{ citaSeleccionada.estado }}</p>
+
+        @if (citaSeleccionada.observaciones) {
+          <p><strong>Observaciones:</strong> {{ citaSeleccionada.observaciones }}</p>
+        }
+
+        <button type="button" class="btn-close-modal" (click)="cerrarDetalle()">
+          Cerrar
+        </button>
+      </div>
+    </div>
+  }
+
+  @if (citaReagendando) {
+
+    <div class="modal-backdrop">
+
+      <div class="modal-reagendar">
+
+        <h3>Reagendar cita</h3>
+
+        <div class="mb-3">
+
+          <label>Nueva fecha</label>
+
+          <input
+            type="date"
+            class="form-control"
+            [(ngModel)]="nuevaFecha"
+            [min]="fechaHoy">
+
+        </div>
+
+        <div class="mb-3">
+
+          <label>Nueva hora</label>
+
+          <input
+            type="time"
+            class="form-control"
+            [(ngModel)]="nuevaHora">
+
+        </div>
+
+        <div class="modal-actions">
+
+          <button
+            class="btn btn-secondary"
+            (click)="citaReagendando = null">
+            Cancelar
+          </button>
+
+          <button
+            class="btn btn-primary"
+            (click)="guardarReagendamiento()">
+            Guardar cambios
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  }
 </ng-template>
