@@ -9,31 +9,80 @@ import { Component } from '@angular/core';
 })
 export class CitasComponent {
 
- citas = [
-    {
-      especialidad: 'Odontología general',
-      fecha: '2026-04-10',
-      hora: '09:00 AM',
-      medico: 'Dr. Juan Pérez',
-      sede: 'Sede Centro',
-      estado: 'Completada'
-    },
-    {
-      especialidad: 'Ortodoncia',
-      fecha: '2026-04-20',
-      hora: '11:00 AM',
-      medico: 'Dra. María Gómez',
-      sede: 'Sede Norte',
-      estado: 'Pendiente'
-    },
-    {
-      especialidad: 'Endodoncia',
-      fecha: '2026-03-15',
-      hora: '02:30 PM',
-      medico: 'Dr. Carlos Ramírez',
-      sede: 'Sede Sur',
-      estado: 'Cancelada'
-    }
-  ];
+  citas: any[] = [];
 
+  ngOnInit() {
+    this.cargarCitas();
+    this.actualizarEstados();
+  }
+
+  cargarCitas() {
+    this.citas = JSON.parse(localStorage.getItem('citas') || '[]');
+  }
+
+  cancelarCita(id: number) {
+  this.citas = this.citas.map(cita => {
+    if (cita.id !== id) {
+      return cita;
+    }
+
+    if (cita.estado === 'Cancelada' || cita.estado === 'Completada') {
+      return cita;
+    }
+
+    return {
+      ...cita,
+      estado: 'Cancelada'
+    };
+  });
+
+  localStorage.setItem('citas', JSON.stringify(this.citas));
+  }
+
+actualizarEstados() {
+
+  const ahora = new Date();
+
+  this.citas = this.citas.map(cita => {
+
+    if (cita.estado === 'Cancelada') {
+      return cita;
+    }
+
+    const fechaHoraCita = new Date(
+      `${cita.fecha} ${this.convertirHora24(cita.hora)}`
+    );
+
+    if (fechaHoraCita < ahora) {
+      return {
+        ...cita,
+        estado: 'Completada'
+      };
+    }
+
+    return cita;
+
+  });
+
+  localStorage.setItem('citas', JSON.stringify(this.citas));
+}
+
+convertirHora24(hora: string): string {
+
+  const [time, modifier] = hora.split(' ');
+
+  let [hours, minutes] = time.split(':');
+
+  if (modifier === 'PM' && hours !== '12') {
+    hours = String(parseInt(hours) + 12);
+  }
+
+  if (modifier === 'AM' && hours === '12') {
+    hours = '00';
+  }
+
+  return `${hours}:${minutes}:00`;
+}
+
+  
 }

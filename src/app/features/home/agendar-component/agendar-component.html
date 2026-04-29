@@ -54,6 +54,17 @@
     <button type="submit" class="btn-schedule">
       Buscar disponibilidad
     </button>
+
+    @if (mensaje) {
+        <div class="alert-success">
+            {{ mensaje }}
+        </div>
+    }
+    @if (error) {
+        <div class="alert-error">
+            {{ error }}
+        </div>
+    }
   </form>
 
   <div class="results-card" *ngIf="resultados.length > 0">
@@ -75,10 +86,12 @@
           {{ item.hora }}
         </div>
 
-        <button class="btn-select">
-          Seleccionar
+        <button type="button" class="btn-select" (click)="seleccionarCita(item)">
+             Seleccionar
         </button>
       </div>
     </div>
+
+    
   </div>
 </section>

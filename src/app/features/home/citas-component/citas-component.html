@@ -32,6 +32,13 @@
       <button class="btn-detail">
         Ver detalle
       </button>
+
+      <button
+        class="btn-cancel"
+        (click)="cancelarCita(cita.id)"
+        [disabled]="cita.estado === 'Cancelada' || cita.estado === 'Completada'">
+        {{ cita.estado === 'Cancelada' ? 'Cancelada' : cita.estado === 'Completada' ? 'Completada' : 'Cancelar' }}
+      </button>
     </div>
   </div>
 </section>

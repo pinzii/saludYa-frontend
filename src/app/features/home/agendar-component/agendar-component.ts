@@ -17,8 +17,17 @@ export class AgendarComponent {
   };
 
   resultados: any[] = [];
+  mensaje = '';
+  error = '';
 
   buscar() {
+    this.mensaje = '';
+    this.error = '';
+
+    if (!this.filtro.especialidad || !this.filtro.fecha) {
+      this.error = 'Selecciona una especialidad y una fecha para buscar disponibilidad';
+      return;
+    }
 
     this.resultados = [
       {
@@ -38,4 +47,32 @@ export class AgendarComponent {
       }
     ];
   }
+
+  seleccionarCita(item: any) {
+  const cita = {
+    id: Date.now(),
+    especialidad: this.filtro.especialidad,
+    fecha: this.filtro.fecha,
+    observaciones: this.filtro.observaciones,
+    sede: item.sede,
+    hora: item.hora,
+    medico: item.medico,
+    estado: 'Pendiente'
+  };
+
+  const citasGuardadas = JSON.parse(localStorage.getItem('citas') || '[]');
+
+  citasGuardadas.push(cita);
+
+  localStorage.setItem('citas', JSON.stringify(citasGuardadas));
+
+  this.mensaje = 'Cita agendada correctamente';
+  this.error = '';
+
+  setTimeout(() => {
+    this.mensaje = '';
+  }, 3000);
+}
+
+
 }

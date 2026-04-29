@@ -1,12 +1,36 @@
 .appointments-card {
   width: 820px;
-  min-height: 600px;
+
+  max-height: 82vh;
+
+  overflow-y: auto;
+
   background: #ffffff;
+
   border-radius: 18px;
+
   padding: 40px;
+
   box-shadow:
     0 12px 28px rgba(0, 0, 0, 0.12),
     0 2px 6px rgba(0, 0, 0, 0.08);
+}
+
+.appointments-card::-webkit-scrollbar {
+  width: 8px;
+}
+
+.appointments-card::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.appointments-card::-webkit-scrollbar-thumb {
+  background: #c8ced6;
+  border-radius: 999px;
+}
+
+.appointments-card::-webkit-scrollbar-thumb:hover {
+  background: #b0b7bf;
 }
 
 .appointments-header {
@@ -121,4 +145,52 @@
 
 .btn-detail:hover {
   transform: translateY(-2px);
+}
+
+.btn-cancel {
+  border: none;
+
+  padding: 10px 16px;
+
+  border-radius: 10px;
+
+  background: #fdecea;
+  color: #b71c1c;
+
+  font-size: 14px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition: all 0.2s ease;
+
+  box-shadow:
+    0 3px 8px rgba(183, 28, 28, 0.15);
+}
+
+.btn-cancel:hover {
+  background: #f8d7da;
+
+  transform: translateY(-2px);
+
+  box-shadow:
+    0 6px 14px rgba(183, 28, 28, 0.25);
+}
+
+.btn-cancel:active {
+  transform: translateY(0);
+}
+
+.btn-cancel:disabled {
+  background: #e0e0e0;
+  color: #777777;
+  cursor: not-allowed;
+  box-shadow: none;
+  transform: none;
+}
+
+.btn-cancel:disabled:hover {
+  background: #e0e0e0;
+  transform: none;
+  box-shadow: none;
 }
