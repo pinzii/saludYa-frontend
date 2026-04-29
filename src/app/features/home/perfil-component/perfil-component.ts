@@ -12,7 +12,7 @@ import { AuthService } from '../../auth/auth.service';
 })
 export class PerfilComponent {
 
-  sidebarOpen = true;
+  
   id!: number;
 
   form = {
@@ -44,9 +44,7 @@ export class PerfilComponent {
     this.cargarUsuario();
   }
 
-  toggleSidebar() {
-    this.sidebarOpen = !this.sidebarOpen;
-  }
+  
 
   cargarUsuario() {
     this.loading = false;

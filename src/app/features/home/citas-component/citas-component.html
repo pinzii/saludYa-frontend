@@ -1,41 +1,37 @@
-<div class="container">
-    <h3>Historial de citas</h3>
-
-    <div class="mt-3">
-        <div class="card mb-3 shadow-sm border-0" *ngFor="let cita of citas">
-
-            <div class="card-body d-flex justify-content-between align-items-center">
-
-                <!-- Info -->
-                <div>
-                    <h5 class="mb-1">{{ cita.especialidad }}</h5>
-                    <p class="mb-1 text-muted">
-                        {{ cita.fecha }} - {{ cita.hora }}
-                    </p>
-                    <small class="text-muted">
-                        {{ cita.medico }} | {{ cita.sede }}
-                    </small>
-                </div>
-
-                <!-- Estado -->
-                <div class="text-end">
-                    <span class="badge mb-2" [ngClass]="{
-          'bg-success': cita.estado === 'Completada',
-          'bg-warning text-dark': cita.estado === 'Pendiente',
-          'bg-danger': cita.estado === 'Cancelada'
-        }">
-                        {{ cita.estado }}
-                    </span>
-
-                    <div>
-                        <button class="btn btn-sm btn-outline-primary">
-                            Ver detalle
-                        </button>
-                    </div>
-                </div>
-
-            </div>
-
-        </div>
+<section class="appointments-card">
+  <div class="appointments-header">
+    <div>
+      <h2>Mis citas</h2>
+      <p>Consulta el historial y estado de tus citas médicas.</p>
     </div>
-</div>
+  </div>
+
+  <div class="appointments-list">
+    <div class="appointment-item" *ngFor="let cita of citas">
+      <div class="date-box">
+        <span class="day">{{ cita.fecha | date:'dd' }}</span>
+        <span class="month">{{ cita.fecha | date:'MMM' }}</span>
+      </div>
+
+      <div class="appointment-info">
+        <h4>{{ cita.especialidad }}</h4>
+        <p>{{ cita.fecha }} · {{ cita.hora }}</p>
+        <small>{{ cita.medico }} · {{ cita.sede }}</small>
+      </div>
+
+      <span
+        class="status"
+        [ngClass]="{
+          'completed': cita.estado === 'Completada',
+          'pending': cita.estado === 'Pendiente',
+          'cancelled': cita.estado === 'Cancelada'
+        }">
+        {{ cita.estado }}
+      </span>
+
+      <button class="btn-detail">
+        Ver detalle
+      </button>
+    </div>
+  </div>
+</section>

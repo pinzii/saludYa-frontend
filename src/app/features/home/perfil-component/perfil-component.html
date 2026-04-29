@@ -1,35 +1,4 @@
-<div class="profile-layout">
 
-  <aside class="sidebar" [class.collapsed]="!sidebarOpen">
-
-    <div class="sidebar-header">
-      <button type="button" class="toggle-btn" (click)="toggleSidebar()">
-        ☰
-      </button>
-
-      <span class="brand" *ngIf="sidebarOpen">
-        SaludYa
-      </span>
-    </div>
-
-    <nav class="sidebar-menu">
-      <a class="menu-item active">
-        <span class="icon">👤</span>
-        <span *ngIf="sidebarOpen">Perfil</span>
-      </a>
-
-      <a class="menu-item">
-        <span class="icon">📅</span>
-        <span *ngIf="sidebarOpen">Citas</span>
-      </a>
-    </nav>
-
-    <button type="button" class="logout-btn">
-      <span class="icon">↪</span>
-      <span *ngIf="sidebarOpen">Salir</span>
-    </button>
-
-  </aside>
 
   <main class="profile-content">
 
@@ -84,4 +53,3 @@
 
   </main>
 
-</div>
