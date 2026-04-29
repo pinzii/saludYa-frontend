@@ -1,71 +1,84 @@
-<div class="container">
-    <h3>Agendar cita</h3>
+<section class="schedule-card">
+  <div class="schedule-header">
+    <h2>Agendar cita</h2>
+    <p>Selecciona especialista, fecha y revisa los horarios disponibles.</p>
+  </div>
 
-    <div class="card p-4 shadow-sm mt-3 border-0">
-        <form (ngSubmit)="buscar()">
-            <div class="mb-3">
-                <label class="form-label">Especialidad</label>
-                <select class="form-select" [(ngModel)]="filtro.especialidad" name="especialidad">
-                    <option value="" disabled selected>Selecciona una especialidad</option>
-                    <option>Odontología general</option>
-                    <option>Ortodoncia</option>
-                    <option>Endodoncia</option>
-                    <option>Periodoncia</option>
-                    <option>Odontopediatría</option>
-                    <option>Cirugía oral</option>
-                    <option>Estética dental</option>
-                </select>
-            </div>
+  <form (ngSubmit)="buscar()" class="schedule-form">
+    <div class="form-grid">
 
+      <div class="form-group">
+        <label>Especialidad</label>
 
-            <div class="mb-3">
-                <label class="form-label">Fecha</label>
-                <input type="date" class="form-control" [(ngModel)]="filtro.fecha" name="fecha">
-            </div>
+        <div class="select-wrapper">
+            <span class="select-icon"> 🩺 </span>
 
+            <select
+                class="form-select"
+                [(ngModel)]="filtro.especialidad"
+                name="especialidad">
 
-            <div class="mb-3">
-                <label class="form-label">Observaciones</label>
-                <textarea class="form-control" rows="3" [(ngModel)]="filtro.observaciones" name="observaciones">
-                </textarea>
-            </div>
+                <option value="" disabled selected>
+                    Selecciona especialista
+                </option>
 
+                <option>Odontología general</option>
+                <option>Ortodoncia</option>
+                <option>Endodoncia</option>
+                <option>Periodoncia</option>
+                <option>Odontopediatría</option>
+                <option>Cirugía oral</option>
+                <option>Estética dental</option>
 
-            <div class="d-grid">
-                <button type="submit" class="btn btn-primary">
-                    Buscar disponibilidad
-                </button>
-            </div>
+            </select>
+        </div>
+      </div>
 
-        </form>
+      <div class="form-group">
+        <label>Fecha</label>
+        <input type="date" class="form-control" [(ngModel)]="filtro.fecha" name="fecha">
+      </div>
+
+      <div class="form-group full">
+        <label>Observaciones</label>
+        <textarea
+          class="form-control textarea"
+          rows="3"
+          [(ngModel)]="filtro.observaciones"
+          name="observaciones"
+          placeholder="Describe brevemente el motivo de la consulta">
+        </textarea>
+      </div>
     </div>
 
-    <!-- RESULTADOS -->
+    <button type="submit" class="btn-schedule">
+      Buscar disponibilidad
+    </button>
+  </form>
 
-    <div class="card p-4 shadow-sm mt-4 border-0" *ngIf="resultados.length > 0">
-        <h5 class="mb-3">Horarios disponibles</h5>
-        <table class="table">
-            <thead>
-                <tr>
-                    <th>Sede</th>
-                    <th>Hora</th>
-                    <th>Médico</th>
-                    <th></th>
-                </tr>
-            </thead>
-
-            <tbody>
-                <tr *ngFor="let item of resultados">
-                    <td>{{ item.sede }}</td>
-                    <td>{{ item.hora }}</td>
-                    <td>{{ item.medico }}</td>
-                    <td>
-                        <button class="btn btn-sm btn-primary">
-                            Seleccionar
-                        </button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+  <div class="results-card" *ngIf="resultados.length > 0">
+    <div class="results-header">
+      <h3>Horarios disponibles</h3>
+      <p>Elige el horario que mejor se ajuste a tu agenda.</p>
     </div>
-</div>
+
+    <div class="results-list">
+      <div class="result-item" *ngFor="let item of resultados">
+        <div class="result-icon">🩺</div>
+
+        <div class="result-info">
+          <h4>{{ item.medico }}</h4>
+          <p>{{ item.sede }}</p>
+        </div>
+
+        <div class="result-time">
+          {{ item.hora }}
+        </div>
+
+        <button class="btn-select">
+          Seleccionar
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
