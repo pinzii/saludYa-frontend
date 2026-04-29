@@ -5,46 +5,79 @@
       <p>Consulta el historial y estado de tus citas médicas.</p>
     </div>
   </div>
-  
+
   @if (mensaje) {
-  <div class="alert-success">
-    ✔ {{ mensaje }}
-  </div>
-}
+    <div class="alert-success">
+      ✔ {{ mensaje }}
+    </div>
+  }
 
   <div class="appointments-list">
-    <div class="appointment-item" *ngFor="let cita of citas">
-      <div class="date-box">
-        <span class="day">{{ cita.fecha | date:'dd' }}</span>
-        <span class="month">{{ cita.fecha | date:'MMM' }}</span>
-      </div>
 
-      <div class="appointment-info">
-        <h4>{{ cita.especialidad }}</h4>
-        <p>{{ cita.fecha }} · {{ cita.hora }}</p>
-        <small>{{ cita.medico }} · {{ cita.sede }}</small>
-      </div>
+    <h3 class="section-title">Pendientes</h3>
 
-      <span
-        class="status"
-        [ngClass]="{
-          'completed': cita.estado === 'Completada',
-          'pending': cita.estado === 'Pendiente',
-          'cancelled': cita.estado === 'Cancelada'
-        }">
-        {{ cita.estado }}
-      </span>
+    @if (citasPendientes.length === 0) {
+      <p class="empty-text">No tienes citas pendientes.</p>
+    }
 
-      <button class="btn-detail">
-        Ver detalle
-      </button>
-
-      <button
-        class="btn-cancel"
-        (click)="cancelarCita(cita.id)"
-        [disabled]="cita.estado === 'Cancelada' || cita.estado === 'Completada'">
-        {{ cita.estado === 'Cancelada' ? 'Cancelada' : cita.estado === 'Completada' ? 'Completada' : 'Cancelar' }}
-      </button>
+    <div class="appointment-item" *ngFor="let cita of citasPendientes">
+      <ng-container *ngTemplateOutlet="citaTemplate; context: { $implicit: cita }"></ng-container>
     </div>
+
+    <h3 class="section-title">Completadas</h3>
+
+    @if (citasCompletadas.length === 0) {
+      <p class="empty-text">No tienes citas completadas.</p>
+    }
+
+    <div class="appointment-item" *ngFor="let cita of citasCompletadas">
+      <ng-container *ngTemplateOutlet="citaTemplate; context: { $implicit: cita }"></ng-container>
+    </div>
+
+    <h3 class="section-title">Canceladas</h3>
+
+    @if (citasCanceladas.length === 0) {
+      <p class="empty-text">No tienes citas canceladas.</p>
+    }
+
+    <div class="appointment-item" *ngFor="let cita of citasCanceladas">
+      <ng-container *ngTemplateOutlet="citaTemplate; context: { $implicit: cita }"></ng-container>
+    </div>
+
   </div>
 </section>
+
+<ng-template #citaTemplate let-cita>
+  <div class="date-box">
+    <span class="day">{{ cita.fecha | date:'dd' }}</span>
+    <span class="month">{{ cita.fecha | date:'MMM' }}</span>
+  </div>
+
+  <div class="appointment-info">
+    <h4>{{ cita.especialidad }}</h4>
+    <p>{{ cita.fecha }} · {{ cita.hora }}</p>
+    <small>{{ cita.medico }} · {{ cita.sede }}</small>
+  </div>
+
+  <span
+    class="status"
+    [ngClass]="{
+      'completed': cita.estado === 'Completada',
+      'pending': cita.estado === 'Pendiente',
+      'cancelled': cita.estado === 'Cancelada'
+    }">
+    {{ cita.estado }}
+  </span>
+
+  <button class="btn-detail">
+    Ver detalle
+  </button>
+
+  <button
+    class="btn-cancel"
+    type="button"
+    (click)="cancelarCita(cita.id)"
+    [disabled]="cita.estado === 'Cancelada' || cita.estado === 'Completada'">
+    {{ cita.estado === 'Cancelada' ? 'Cancelada' : cita.estado === 'Completada' ? 'Completada' : 'Cancelar' }}
+  </button>
+</ng-template>

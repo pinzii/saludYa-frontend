@@ -81,6 +81,14 @@ export class AgendarComponent {
   this.mensaje = 'Cita agendada correctamente';
   this.error = '';
 
+  this.filtro = {
+  especialidad: '',
+  fecha: '',
+  observaciones: ''
+};
+
+this.resultados = [];
+
   setTimeout(() => {
     this.mensaje = '';
   }, 3000);
