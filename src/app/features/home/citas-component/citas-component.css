@@ -194,3 +194,15 @@
   transform: none;
   box-shadow: none;
 }
+
+.alert-success {
+  margin: 18px 0;
+  padding: 14px 18px;
+  border-radius: 12px;
+  background: #e8f5e9;
+  color: #1b5e20;
+  font-size: 15px;
+  font-weight: 700;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 128, 0, 0.15);
+}

@@ -49,6 +49,20 @@ export class AgendarComponent {
   }
 
   seleccionarCita(item: any) {
+  const citasGuardadas = JSON.parse(localStorage.getItem('citas') || '[]');
+
+  const existeCita = citasGuardadas.some((cita: any) =>
+    cita.fecha === this.filtro.fecha &&
+    cita.hora === item.hora &&
+    cita.estado !== 'Cancelada'
+  );
+
+  if (existeCita) {
+    this.error = 'Ya tienes una cita agendada en esa fecha y hora';
+    this.mensaje = '';
+    return;
+  }
+
   const cita = {
     id: Date.now(),
     especialidad: this.filtro.especialidad,
@@ -59,8 +73,6 @@ export class AgendarComponent {
     medico: item.medico,
     estado: 'Pendiente'
   };
-
-  const citasGuardadas = JSON.parse(localStorage.getItem('citas') || '[]');
 
   citasGuardadas.push(cita);
 

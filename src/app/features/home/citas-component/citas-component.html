@@ -5,6 +5,12 @@
       <p>Consulta el historial y estado de tus citas médicas.</p>
     </div>
   </div>
+  
+  @if (mensaje) {
+  <div class="alert-success">
+    ✔ {{ mensaje }}
+  </div>
+}
 
   <div class="appointments-list">
     <div class="appointment-item" *ngFor="let cita of citas">

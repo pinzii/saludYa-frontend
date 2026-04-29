@@ -279,3 +279,18 @@ label {
     transform: translateY(0);
   }
 }
+
+.alert-error {
+  margin-top: 18px;
+  padding: 14px 18px;
+  border-radius: 12px;
+  background: #fdecea;
+  color: #b71c1c;
+  font-size: 15px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-shadow: 0 4px 10px rgba(183, 28, 28, 0.15);
+}

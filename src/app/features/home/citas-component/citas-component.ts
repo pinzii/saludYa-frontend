@@ -8,7 +8,8 @@ import { Component } from '@angular/core';
   styleUrl: './citas-component.css',
 })
 export class CitasComponent {
-
+  
+  mensaje = '';
   citas: any[] = [];
 
   ngOnInit() {
@@ -21,6 +22,10 @@ export class CitasComponent {
   }
 
   cancelarCita(id: number) {
+  const confirmar = confirm('¿Seguro que deseas cancelar esta cita?');
+
+  if (!confirmar) return;
+
   this.citas = this.citas.map(cita => {
     if (cita.id !== id) {
       return cita;
@@ -37,7 +42,13 @@ export class CitasComponent {
   });
 
   localStorage.setItem('citas', JSON.stringify(this.citas));
-  }
+
+  this.mensaje = 'Cita cancelada correctamente';
+
+  setTimeout(() => {
+    this.mensaje = '';
+  }, 3000);
+}
 
 actualizarEstados() {
 
