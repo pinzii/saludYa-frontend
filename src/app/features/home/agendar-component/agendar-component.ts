@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { CitaService } from '../../../core/services/cita.service'; 
+import { Cita } from '../../../core/models/cita.model';
 
 @Component({
   selector: 'app-agendar-component',
@@ -9,6 +11,8 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './agendar-component.css',
 })
 export class AgendarComponent {
+
+ constructor(private citaService: CitaService) {}
 
   filtro = {
     especialidad: '',
@@ -48,23 +52,11 @@ export class AgendarComponent {
     ];
   }
 
-  seleccionarCita(item: any) {
-  const citasGuardadas = JSON.parse(localStorage.getItem('citas') || '[]');
+ seleccionarCita(item: any) {
+  this.error = '';
+  this.mensaje = '';
 
-  const existeCita = citasGuardadas.some((cita: any) =>
-    cita.fecha === this.filtro.fecha &&
-    cita.hora === item.hora &&
-    cita.estado !== 'Cancelada'
-  );
-
-  if (existeCita) {
-    this.error = 'Ya tienes una cita agendada en esa fecha y hora';
-    this.mensaje = '';
-    return;
-  }
-
-  const cita = {
-    id: Date.now(),
+  const nuevaCita: Cita = {
     especialidad: this.filtro.especialidad,
     fecha: this.filtro.fecha,
     observaciones: this.filtro.observaciones,
@@ -74,24 +66,31 @@ export class AgendarComponent {
     estado: 'Pendiente'
   };
 
-  citasGuardadas.push(cita);
+  // Llamada real al backend
+  this.citaService.crearCita(nuevaCita).subscribe({
+    next: (resultado) => {      
+      this.mensaje = 'Cita agendada correctamente en el sistema';
+      this.limpiarFormulario(); // Función para resetear los campos
+    },
+    error: (err) => {
+      this.error = 'Error de conexión: No se pudo persistir la cita';
+      console.error(err);
+    }
+  });
+}
 
-  localStorage.setItem('citas', JSON.stringify(citasGuardadas));
-
-  this.mensaje = 'Cita agendada correctamente';
-  this.error = '';
-
+// Esta función reseteará el formulario a su estado original
+limpiarFormulario() {
   this.filtro = {
-  especialidad: '',
-  fecha: '',
-  observaciones: ''
-};
-
-this.resultados = [];
-
-  setTimeout(() => {
+    especialidad: '',
+    fecha: '',
+    observaciones: ''
+  };
+    this.resultados = []; // Limpia la tabla de resultados
+  
+    setTimeout(() => {
     this.mensaje = '';
-  }, 3000);
+    }, 3000);
 }
 
 
