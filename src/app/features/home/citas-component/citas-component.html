@@ -6,40 +6,40 @@
     </div>
   </div>
 
+  
   @if (mensaje) {
     <div class="alert-success">
       ✔ {{ mensaje }}
+    </div>
+  }
+  @if (error) {
+    <div class="alert-error" style="color: red; margin-bottom: 10px;">
+      ❌ {{ error }}
     </div>
   }
 
   <div class="appointments-list">
 
     <h3 class="section-title">Pendientes</h3>
-
     @if (citasPendientes.length === 0) {
       <p class="empty-text">No tienes citas pendientes.</p>
     }
-
     <div class="appointment-item" *ngFor="let cita of citasPendientes">
       <ng-container *ngTemplateOutlet="citaTemplate; context: { $implicit: cita }"></ng-container>
     </div>
 
     <h3 class="section-title">Completadas</h3>
-
     @if (citasCompletadas.length === 0) {
       <p class="empty-text">No tienes citas completadas.</p>
     }
-
     <div class="appointment-item" *ngFor="let cita of citasCompletadas">
       <ng-container *ngTemplateOutlet="citaTemplate; context: { $implicit: cita }"></ng-container>
     </div>
 
     <h3 class="section-title">Canceladas</h3>
-
     @if (citasCanceladas.length === 0) {
       <p class="empty-text">No tienes citas canceladas.</p>
     }
-
     <div class="appointment-item" *ngFor="let cita of citasCanceladas">
       <ng-container *ngTemplateOutlet="citaTemplate; context: { $implicit: cita }"></ng-container>
     </div>
@@ -86,89 +86,41 @@
     type="button"
     (click)="reagendarCita(cita)"
     [disabled]="cita.estado === 'Cancelada' || cita.estado === 'Completada'">
-    
-    {{
-      cita.estado === 'Cancelada'
-        ? 'Reagendar'
-        : cita.estado === 'Completada'
-        ? 'Completada'
-        : 'Reagendar'
-    }}
+    Reagendar
   </button>
-
-  @if (citaSeleccionada) {
-    <div class="modal-backdrop">
-      <div class="detail-modal">
-        <h3>Detalle de la cita</h3>
-
-        <p><strong>Especialidad:</strong> {{ citaSeleccionada.especialidad }}</p>
-        <p><strong>Fecha:</strong> {{ citaSeleccionada.fecha }}</p>
-        <p><strong>Hora:</strong> {{ citaSeleccionada.hora }}</p>
-        <p><strong>Médico:</strong> {{ citaSeleccionada.medico }}</p>
-        <p><strong>Sede:</strong> {{ citaSeleccionada.sede }}</p>
-        <p><strong>Estado:</strong> {{ citaSeleccionada.estado }}</p>
-
-        @if (citaSeleccionada.observaciones) {
-          <p><strong>Observaciones:</strong> {{ citaSeleccionada.observaciones }}</p>
-        }
-
-        <button type="button" class="btn-close-modal" (click)="cerrarDetalle()">
-          Cerrar
-        </button>
-      </div>
-    </div>
-  }
-
-  @if (citaReagendando) {
-
-    <div class="modal-backdrop">
-
-      <div class="modal-reagendar">
-
-        <h3>Reagendar cita</h3>
-
-        <div class="mb-3">
-
-          <label>Nueva fecha</label>
-
-          <input
-            type="date"
-            class="form-control"
-            [(ngModel)]="nuevaFecha"
-            [min]="fechaHoy">
-
-        </div>
-
-        <div class="mb-3">
-
-          <label>Nueva hora</label>
-
-          <input
-            type="time"
-            class="form-control"
-            [(ngModel)]="nuevaHora">
-
-        </div>
-
-        <div class="modal-actions">
-
-          <button
-            class="btn btn-secondary"
-            (click)="citaReagendando = null">
-            Cancelar
-          </button>
-
-          <button
-            class="btn btn-primary"
-            (click)="guardarReagendamiento()">
-            Guardar cambios
-          </button>
-
-        </div>
-
-      </div>
-
-    </div>
-
-  }
 </ng-template>
+
+@if (citaSeleccionada) {
+  <div class="modal-backdrop">
+    <div class="detail-modal">
+      <h3>Detalle de la cita</h3>
+      <p><strong>Especialidad:</strong> {{ citaSeleccionada.especialidad }}</p>
+      <p><strong>Fecha:</strong> {{ citaSeleccionada.fecha }}</p>
+      <p><strong>Hora:</strong> {{ citaSeleccionada.hora }}</p>
+      <p><strong>Médico:</strong> {{ citaSeleccionada.medico }}</p>
+      <p><strong>Sede:</strong> {{ citaSeleccionada.sede }}</p>
+      <p><strong>Estado:</strong> {{ citaSeleccionada.estado }}</p>
+      <button type="button" class="btn-close-modal" (click)="cerrarDetalle()">Cerrar</button>
+    </div>
+  </div>
+}
+
+@if (citaReagendando) {
+  <div class="modal-backdrop">
+    <div class="modal-reagendar">
+      <h3>Reagendar cita</h3>
+      <div class="mb-3">
+        <label>Nueva fecha</label>
+        <input type="date" class="form-control" [(ngModel)]="nuevaFecha" [min]="fechaHoy">
+      </div>
+      <div class="mb-3">
+        <label>Nueva hora</label>
+        <input type="time" class="form-control" [(ngModel)]="nuevaHora">
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary" (click)="citaReagendando = null">Cancelar</button>
+        <button class="btn btn-primary" (click)="guardarReagendamiento()">Guardar cambios</button>
+      </div>
+    </div>
+  </div>
+}

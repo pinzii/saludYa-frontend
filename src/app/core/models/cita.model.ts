@@ -7,5 +7,5 @@ export interface Cita {
   hora: string;
   sede: string;
   observaciones?: string;
-  estado: 'Pendiente' | 'Confirmada' | 'Cancelada';
+  estado: 'Pendiente' | 'Confirmada' | 'Cancelada' | 'Completada';
 }
