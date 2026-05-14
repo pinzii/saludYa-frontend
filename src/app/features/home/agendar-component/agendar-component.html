@@ -88,8 +88,8 @@
           {{ item.hora }}
         </div>
 
-        <button type="button" class="btn-select" (click)="seleccionarCita(item)">
-             Seleccionar
+        <button type="button" class="btn-select" [disabled]="cargando" (click)="seleccionarCita(item)">
+             {{ cargando ? 'Guardando...' : 'Seleccionar' }}
         </button>
       </div>
     </div>

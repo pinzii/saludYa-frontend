@@ -84,7 +84,7 @@
   <button
     class="btn-reschedule"
     type="button"
-    (click)="reagendarCita(cita)"
+    (click)="prepararReagendar(cita)"
     [disabled]="cita.estado === 'Cancelada' || cita.estado === 'Completada'">
     Reagendar
   </button>
@@ -105,7 +105,7 @@
   </div>
 }
 
-@if (citaReagendando) {
+@if (citaParaReagendar) {
   <div class="modal-backdrop">
     <div class="modal-reagendar">
       <h3>Reagendar cita</h3>
@@ -115,10 +115,19 @@
       </div>
       <div class="mb-3">
         <label>Nueva hora</label>
-        <input type="time" class="form-control" [(ngModel)]="nuevaHora">
+        <input type="time" 
+               class="form-control" 
+               [(ngModel)]="nuevaHora"
+               min="07:00"
+               max="18:00"
+               #horaInput="ngModel">
+
+              <div *ngIf="horaInput.invalid && horaInput.touched" style="color: red; font-size: 0.8rem;">
+                 Horario fuera de rango permitido.
+              </div>
       </div>
       <div class="modal-actions">
-        <button class="btn btn-secondary" (click)="citaReagendando = null">Cancelar</button>
+        <button class="btn btn-secondary" (click)="citaParaReagendar = null; error = ''; nuevaHora = ''; nuevaFecha = ''">Cancelar</button>
         <button class="btn btn-primary" (click)="guardarReagendamiento()">Guardar cambios</button>
       </div>
     </div>

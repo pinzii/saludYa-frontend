@@ -17,14 +17,16 @@ export class CitasComponent implements OnInit {
   mensaje = '';
   error = '';
   citas: Cita[] = [];
-  citaReagendando: any = null;
+  
   nuevaFecha = '';
   nuevaHora = '';
   fechaHoy = new Date().toISOString().split('T')[0];
 
   citasPendientes: Cita[] = [];
   citasCompletadas: Cita[] = [];
-  citasCanceladas: Cita[] = [];
+  citasCanceladas: Cita[] = [];  
+  citaParaReagendar: Cita | null = null; 
+  nuevaHoraReagendar: string = ''; 
 
   constructor(
     private citaService: CitaService,
@@ -39,7 +41,7 @@ export class CitasComponent implements OnInit {
   cargarCitas() {
     this.citaService.getCitas().subscribe({
       next: (data) => {
-        // Primero procesamos los estados, luego ordenamos y al final asignamos
+       
         const citasProcesadas = this.procesarEstados(data);
         this.citas = this.ordenarCitas(citasProcesadas);
 
@@ -91,32 +93,63 @@ export class CitasComponent implements OnInit {
 
   // Método para reagendar en el Backend
   guardarReagendamiento() {
-    if (!this.nuevaFecha || !this.nuevaHora) {
-      this.error = 'Selecciona nueva fecha y hora';
-      return;
-    }
-
-    if (this.nuevaFecha < this.fechaHoy) {
-      this.error = 'No puedes reagendar una cita a una fecha pasada';
-      return;
-    }
-
-    const datosActualizados: Partial<Cita> = {
-      fecha: this.nuevaFecha,
-      hora: this.nuevaHora,
-      estado: 'Pendiente'
-    };
-
-    this.citaService.actualizarCita(this.citaReagendando.id, datosActualizados).subscribe({
-      next: () => {
-        this.mensaje = 'Cita reagendada correctamente';
-        this.citaReagendando = null;
-        this.cargarCitas();
-        setTimeout(() => this.mensaje = '', 3000);
-      },
-      error: () => this.error = 'Error al actualizar la cita'
-    });
+  // Validamos que la variable que usa el HTML no sea null
+  if (!this.citaParaReagendar) {
+    this.error = 'No hay una cita seleccionada para actualizar';
+    return;
   }
+
+  const [horas, minutos] = this.nuevaHora.split(':').map(Number);
+    
+  if (horas < 7 || horas > 18 || (horas === 18 && minutos > 0)) {
+    this.error = 'El horario de atención es 07:00 AM a 06:00 PM.';
+    this.cdr.detectChanges();
+    return; // Bloqueamos el subscribe
+  }
+  this.error = '';
+
+  if (!this.nuevaFecha || !this.nuevaHora) {
+    this.error = 'Selecciona nueva fecha y hora';
+    this.cdr.detectChanges(); 
+    return;
+  }
+
+  if (this.nuevaFecha < this.fechaHoy) {
+    this.error = 'No puedes reagendar una cita a una fecha pasada';
+    this.cdr.detectChanges();
+    return;
+  }
+
+  const datosActualizados: Partial<Cita> = {
+    fecha: this.nuevaFecha,
+    hora: this.nuevaHora,
+    estado: 'Pendiente'
+  };  
+  
+  this.citaService.actualizarCita(this.citaParaReagendar.id!, datosActualizados).subscribe({
+    next: () => {
+      this.mensaje = 'Cita reagendada correctamente';  
+      
+      this.nuevaHora = '';
+      this.nuevaFecha = '';    
+      
+      this.citaParaReagendar = null; 
+      
+      this.cargarCitas(); 
+      this.cdr.detectChanges();
+
+      setTimeout(() => {
+        this.mensaje = '';
+        this.cdr.detectChanges();
+      }, 3000);
+    },
+    error: (err) => {
+      this.error = 'Error al actualizar la cita';
+      console.error(err);
+      this.cdr.detectChanges();
+    }
+  });
+}
 
   // --- MÉTODOS DE APOYO (Lógica de negocio en el Front) ---
 
@@ -144,9 +177,20 @@ export class CitasComponent implements OnInit {
   
   reagendarCita(cita: any) {
     if (cita.estado === 'Cancelada' || cita.estado === 'Completada') return;
-    this.citaReagendando = cita;
+    this.citaParaReagendar = cita;
     this.nuevaFecha = '';
     this.nuevaHora = '';
     this.error = '';
   }
+
+  prepararReagendar(cita: Cita) {
+  this.error = '';
+  this.mensaje = '';  
+  this.citaParaReagendar = cita;
+
+  this.nuevaHoraReagendar = cita.hora;
+  console.log('Abriendo modal para:', cita)
+
+  this.cdr.detectChanges();
+}
 }
