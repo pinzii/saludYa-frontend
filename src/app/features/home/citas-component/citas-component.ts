@@ -3,6 +3,7 @@ import { Component, OnInit, ChangeDetectorRef, ChangeDetectionStrategy } from '@
 import { FormsModule } from '@angular/forms';
 import { CitaService } from '../../../core/services/cita.service'; // Asegura la ruta
 import { Cita } from '../../../core/models/cita.model';
+import { ToastService } from '../../../core/services/toast.service';
 
 @Component({
   selector: 'app-citas-component',
@@ -32,6 +33,7 @@ export class CitasComponent implements OnInit {
 
   constructor(
     private citaService: CitaService,
+    private toastService: ToastService,
     private cdr: ChangeDetectorRef
   ) {}
 
@@ -52,7 +54,7 @@ export class CitasComponent implements OnInit {
         this.cdr.detectChanges();
       },
       error: (err) => {
-        this.error = 'No se pudieron cargar las citas';
+        this.toastService.mostrar('Error al conectar con la base de datos', 'error');
         this.cdr.detectChanges();
         console.error(err);
       }
@@ -131,7 +133,7 @@ filtrarCitasEnTiempoReal() {
   const [horas, minutos] = this.nuevaHora.split(':').map(Number);
     
   if (horas < 7 || horas > 18 || (horas === 18 && minutos > 0)) {
-    this.error = 'El horario de atención es 07:00 AM a 06:00 PM.';
+    this.toastService.mostrar('El horario de atención es 07:00 AM a 06:00 PM.', 'error'); 
     this.cdr.detectChanges();
     return; // Bloqueamos el subscribe
   }
@@ -157,7 +159,7 @@ filtrarCitasEnTiempoReal() {
   
   this.citaService.actualizarCita(this.citaParaReagendar.id!, datosActualizados).subscribe({
     next: () => {
-      this.mensaje = 'Cita reagendada correctamente';  
+      this.toastService.mostrar('¡Cita reagendada con éxito!', 'success');  
       
       this.nuevaHora = '';
       this.nuevaFecha = '';    
@@ -173,7 +175,7 @@ filtrarCitasEnTiempoReal() {
       }, 3000);
     },
     error: (err) => {
-      this.error = 'Error al actualizar la cita';
+      this.toastService.mostrar('Error al conectar con la base de datos', 'error');
       console.error(err);
       this.cdr.detectChanges();
     }

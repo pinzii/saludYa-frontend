@@ -1,0 +1,14 @@
+<div *ngIf="data.visible" class="toast-card" [ngClass]="data.tipo">
+  <div class="toast-content">
+    <svg *ngIf="data.tipo === 'success'" class="toast-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+    </svg>
+
+    <svg *ngIf="data.tipo === 'error'" class="toast-icon" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+    </svg>
+
+    <span class="toast-message">{{ data.mensaje }}</span>
+  </div>
+  <button class="toast-close" (click)="cerrar()">✕</button>
+</div>
