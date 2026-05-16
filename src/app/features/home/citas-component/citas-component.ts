@@ -14,6 +14,8 @@ import { Cita } from '../../../core/models/cita.model';
 })
 export class CitasComponent implements OnInit {
   
+  terminoBusqueda: string = '';
+
   mensaje = '';
   error = '';
   citas: Cita[] = [];
@@ -45,9 +47,7 @@ export class CitasComponent implements OnInit {
         const citasProcesadas = this.procesarEstados(data);
         this.citas = this.ordenarCitas(citasProcesadas);
 
-        this.citasPendientes = this.citas.filter(c => c.estado === 'Pendiente');
-        this.citasCompletadas = this.citas.filter(c => c.estado === 'Completada');
-        this.citasCanceladas = this.citas.filter(c => c.estado === 'Cancelada');
+        this.filtrarCitasEnTiempoReal();
 
         this.cdr.detectChanges();
       },
@@ -58,6 +58,35 @@ export class CitasComponent implements OnInit {
       }
     });
   }
+
+  // Nueva función para el buscador reactivo
+filtrarCitasEnTiempoReal() {
+  const termino = this.terminoBusqueda.toLowerCase().trim();
+
+  if (!termino) {
+    // Si el buscador está vacío, se distribuyen todas las citas normalmente
+    this.citasPendientes = this.citas.filter(c => c.estado === 'Pendiente');
+    this.citasCompletadas = this.citas.filter(c => c.estado === 'Completada');
+    this.citasCanceladas = this.citas.filter(c => c.estado === 'Cancelada');
+  } else {
+    // Si hay texto, filtramos el arreglo maestro 'this.citas' por especialidad o médico
+    this.citasPendientes = this.citas.filter(c => 
+      c.estado === 'Pendiente' && 
+      (c.especialidad?.toLowerCase().includes(termino) || c.medico?.toLowerCase().includes(termino))
+    );
+    this.citasCompletadas = this.citas.filter(c => 
+      c.estado === 'Completada' && 
+      (c.especialidad?.toLowerCase().includes(termino) || c.medico?.toLowerCase().includes(termino))
+    );
+    this.citasCanceladas = this.citas.filter(c => 
+      c.estado === 'Cancelada' && 
+      (c.especialidad?.toLowerCase().includes(termino) || c.medico?.toLowerCase().includes(termino))
+    );
+  }
+
+  // Notificamos a la vista del cambio (esencial por el OnPush)
+  this.cdr.detectChanges();
+}
 
   // Cambiamos el nombre y la lógica para que sea una función pura
   procesarEstados(citasRecibidas: Cita[]): Cita[] {
