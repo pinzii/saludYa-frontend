@@ -362,3 +362,55 @@
   color: #d71111;
   font-size: 1.2rem;
 }
+
+.empty-state-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+  background: #ffffff;
+  border: 1px dashed #e2e8f0; /* Borde punteado sutil que denota zona vacía */
+  border-radius: 12px;
+  margin: 15px 0;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.empty-state-content {
+  max-width: 360px;
+}
+
+/* Icono SVG atenuado e imponente */
+.empty-state-icon {
+  width: 54px;
+  height: 54px;
+  color: #cbd5e1; /* Gris claro sofisticado */
+  margin-bottom: 16px;
+}
+
+.empty-state-container h3 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #4a5568;
+  margin-bottom: 8px;
+}
+
+.empty-state-container p {
+  font-size: 0.9rem;
+  color: #718096;
+  line-height: 1.5;
+  margin: 0;
+}
+
+/* Animación de entrada fluida */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
