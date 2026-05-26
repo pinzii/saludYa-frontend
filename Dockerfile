@@ -1,14 +1,17 @@
-# Capa 1: Compilación (Multi-stage build para no pesar en producción)
-FROM maven:3.9.6-eclipse-temurin-17 AS build
+# Capa 1: Construcción de artefactos de Angular
+FROM node:22-alpine AS build
 WORKDIR /app
-COPY openapi.json .
-COPY pom.xml .
-COPY src ./src
-RUN mvn clean package -DskipTests
 
-# Capa 2: Entorno de ejecución ligero
-FROM eclipse-temurin:17-jre-jammy
-WORKDIR /app
-COPY --from=build /app/target/*.jar app.jar
-EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
+# Copiamos archivos de dependencias
+COPY package*.json ./
+RUN npm install
+
+# Copiamos el resto del código y compilamos
+COPY . .
+RUN npm run build -- --configuration=production
+
+# Capa 2: Servidor Nginx ultra-ligero para producción
+FROM nginx:alpine
+COPY --from=build /app/dist/salud-ya/browser /usr/share/nginx/html
+EXPOSE 80
+CMD ["nginx", "-g", "daemon off;"]
