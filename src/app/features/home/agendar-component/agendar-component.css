@@ -294,3 +294,68 @@ label {
   gap: 10px;
   box-shadow: 0 4px 10px rgba(183, 28, 28, 0.15);
 }
+
+/* ==========================================================================
+   MEDIA QUERY: ADAPTABILIDAD MILIMÉTRICA DE AGENDAMIENTO (MÓVIL)
+   ========================================================================== */
+
+@media (max-width: 768px) {
+  /* 1. Forzamos a que la tarjeta blanca ocupe todo el ancho sin desborde */
+  .schedule-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    padding: 24px 16px !important;
+    box-sizing: border-box !important;
+  }
+
+  /* 2. SOLUCIÓN RAÍZ: Rompemos las 2 columnas de la grilla y la dejamos en 1 sola columna vertical */
+  .form-grid {
+    grid-template-columns: 1fr !important; /* Especialidad arriba, Fecha abajo, Observaciones al fondo */
+    gap: 16px !important;
+  }
+
+  /* 3. Aseguramos que los elementos internos utilicen el 100% de la nueva columna única */
+  .form-group,
+  .select-wrapper {
+    width: 100% !important;
+    grid-column: span 1 !important; /* Resetea el span 2 de las observaciones */
+  }
+
+  /* 4. Los controles se expanden de forma fluida */
+  .form-control,
+  .form-select,
+  input[type="date"] {
+    width: 100% !important;
+    max-width: 100% !important;
+    display: block !important;
+    box-sizing: border-box !important;
+  }
+
+  /* 5. Ajuste del botón para pantallas táctiles */
+  .btn-schedule {
+    width: 100% !important;
+    padding: 14px 20px !important;
+    box-sizing: border-box !important;
+  }
+
+  /* 6. Adaptabilidad para las tarjetas de resultados médicos que aparecen abajo */
+  .result-item {
+    grid-template-columns: 1fr !important; /* Pasa el layout del médico a una sola columna */
+    text-align: center;
+    gap: 12px !important;
+    padding: 16px !important;
+  }
+
+  .result-icon {
+    margin: 0 auto !important; /* Centra el icono del doctor */
+  }
+
+  .result-time {
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  .btn-select {
+    width: 100% !important;
+  }
+}
