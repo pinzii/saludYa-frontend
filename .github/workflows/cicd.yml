@@ -47,6 +47,15 @@ jobs:
       - name: Descargar código fuente del repositorio
         uses: actions/checkout@v4
 
+      - name: Configurar entorno de Node.js (v20)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Instalar dependencias (Requerido por Netlify CLI)
+        run: npm ci
+
       - name: Descargar artefacto compilado anteriormente
         uses: actions/download-artifact@v4
         with:
