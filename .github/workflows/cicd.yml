@@ -25,7 +25,7 @@ jobs:
         run: npm ci
 
       - name: Ejecutar Pruebas Automatizadas (Tests)
-        run: npm run test -- --run
+        run: npm run test -- --no-watch --no-progress --browsers=ChromeHeadless
 
       - name: Ejecutar Build del Proyecto (Compilación)
         run: npm run build -- --configuration=production
