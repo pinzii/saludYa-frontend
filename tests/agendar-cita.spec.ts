@@ -2,11 +2,11 @@ import { test, expect } from '@playwright/test';
 
 test('Flujo End-to-End: Agendar una cita en SaludYa exitosamente', async ({ page }) => {
   // 1. Visitar la app
-  await page.goto('http://localhost:4200');
+  await page.goto('https://saludya-app.netlify.app');
 
   // 2. Iniciar sesión exitosamente
-  await page.getByPlaceholder('Correo electrónico').fill('felipe@ejemplo.com'); 
-  await page.getByPlaceholder('Contraseña').fill('123456'); 
+  await page.getByPlaceholder('Correo electrónico').fill('fpinzon514@gmail.com'); 
+  await page.getByPlaceholder('Contraseña').fill('1919'); 
   await page.getByRole('button', { name: 'Entrar' }).click();
 
   
