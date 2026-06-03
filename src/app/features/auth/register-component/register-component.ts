@@ -25,10 +25,10 @@ export class RegisterComponent {
   ) {}
 
   registrar() {
-    if (this.form.password !== this.form.password2) {
-      alert('Las contraseñas no coinciden');
-      return;
-    }
+    // if (this.form.password !== this.form.password2) {
+    //   alert('Las contraseñas no coinciden');
+    //   return;
+    // }
 
     const data = {
       nombre: this.form.nombre,

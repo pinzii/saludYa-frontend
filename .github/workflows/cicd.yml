@@ -1,0 +1,66 @@
+name: CI/CD Pipeline - SaludYa Frontend
+
+on:
+  pull_request:
+    branches: ['main', 'master']
+  push:
+    branches: ['main', 'master']
+
+jobs:
+  continuous-integration:
+    name: Integración Continuas (CI)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar código fuente del repositorio
+        uses: actions/checkout@v4
+
+      - name: Configurar entorno de Node.js (v20)
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Instalar dependencias del proyecto
+        run: npm ci
+
+      - name: Ejecutar Lint (Validación de código)
+        run: npm run lint --if-present
+
+      - name: Ejecutar Pruebas Automatizadas (Tests)
+        run: npm test -- --watch=false --browsers=ChromeHeadless --if-present
+
+      - name: Ejecutar Build del Proyecto (Compilación)
+        run: npm run build -- --configuration=production
+
+      - name: Guardar artefacto compilado temporalmente
+        if: github.event_name == 'push'
+        uses: actions/upload-artifact@v4
+        with:
+          name: angular-dist-build
+          path: dist/front-saludYa
+
+  continuous-deployment:
+    name: Despliegue Continuo (CD)
+    needs: continuous-integration
+    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Descargar código fuente del repositorio
+        uses: actions/checkout@v4
+
+      - name: Descargar artefacto compilado anteriormente
+        uses: actions/download-artifact@v4
+        with:
+          name: angular-dist-build
+          path: dist/front-saludYa
+
+      - name: Instalar Netlify CLI de forma global
+        run: npm install -g netlify-cli
+
+      - name: Desplegar producción automáticamente en Netlify
+        run: netlify deploy --dir=dist/front-saludYa --prod
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
