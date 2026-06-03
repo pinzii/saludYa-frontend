@@ -41,29 +41,32 @@ test('Flujo End-to-End 2: Mostrar mensaje de error con credenciales incorrectas'
   // 2. Interceptamos el recuadro rojo por su clase CSS
   const alertaError = page.locator('.alert-error');
 
+  await alertaError.waitFor({ state: 'visible', timeout: 10000 });
+
   // 3. Verificamos que el cuadro rojo sea visible en la pantalla
   await expect(alertaError).toBeVisible();
 
   // 4. Verificamos que contenga el texto de rechazo del backend
   await expect(alertaError).toContainText('Credenciales inválidas'); 
 });
+
 // Prueba E2E #3 (Validación de campos vacíos)
 test('Flujo End-to-End 3: Prevenir agendamiento si el formulario está incompleto', async ({ page }) => {
   await page.goto('https://saludya-app.netlify.app/login');
 
-  // Iniciar sesión
   await page.getByPlaceholder('Correo electrónico').fill('fpinzon514@gmail.com'); 
   await page.getByPlaceholder('Contraseña').fill('1919'); 
   await page.getByRole('button', { name: 'Entrar' }).click();
 
-  // Navegar a la vista de agendamiento
   await page.getByText('Agendar cita').click();
   await expect(page.locator('select[name="especialidad"]')).toBeVisible({ timeout: 10000 });
 
-  // NO llenamos ningún campo y tratamos de buscar horarios directamente
   await page.locator('button.btn-schedule').click();
 
-  // Verificamos que no salga la alerta verde de éxito, ya que la petición debe fallar
+  // En lugar de esperar inmediatamente, le damos un margen al servidor
+  // Esto evita que la prueba falle por "velocidad de procesamiento"
+  await page.waitForTimeout(1000); 
+
   const alertaExito = page.locator('.alert-success');
   await expect(alertaExito).not.toBeVisible();
 });
