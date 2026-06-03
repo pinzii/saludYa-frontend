@@ -35,7 +35,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: angular-dist-build
-          path: dist/front-saludYa
+          path: dist/front-saludYa/browser
 
   continuous-deployment:
     name: Despliegue Continuo (CD)
@@ -60,13 +60,13 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: angular-dist-build
-          path: dist/front-saludYa
+          path: dist/front-saludYa/browser
 
       - name: Instalar Netlify CLI de forma global
         run: npm install -g netlify-cli
 
       - name: Desplegar producción automáticamente en Netlify
-        run: netlify deploy --dir=dist/front-saludYa --prod
+        run: netlify deploy --dir=dist/front-saludYa/browser --prod
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
