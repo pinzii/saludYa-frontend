@@ -20,6 +20,12 @@
         name="password">
     </div>
 
+    @if (errorMessage !== '') {
+      <div class="alert-error" style="color: red; background-color: #fee2e2; padding: 10px; border-radius: 5px; margin-bottom: 15px; text-align: center; font-weight: 500;">
+        ⚠️ {{ errorMessage }}
+      </div>
+    }
+
     <button class="btn-login" type="submit">
       Entrar
     </button>
