@@ -68,12 +68,6 @@ export class AgendarComponent {
   }
   return horarios;
 
-    // Simulando disponibilidad
-    this.resultados = [
-      { sede: 'Sede Centro', hora: '08:00 AM', medico: 'Dr. Juan Pérez' },
-      { sede: 'Sede Norte', hora: '10:30 AM', medico: 'Dra. María Gómez' },
-      { sede: 'Sede Sur', hora: '02:00 PM', medico: 'Dr. Carlos Ramírez' }
-    ];
   }
 
   seleccionarCita(item: any) {
