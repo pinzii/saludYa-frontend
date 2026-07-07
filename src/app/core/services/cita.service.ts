@@ -15,7 +15,7 @@ import { Cita } from '../models/cita.model';
   providedIn: 'root'
 })
 export class CitaService {
-  private api = `${environment.apiUrl}/appointments`;
+  private api = `${environment.apiUrl}/api/appointments`;
 
   constructor(private http: HttpClient) {}
 

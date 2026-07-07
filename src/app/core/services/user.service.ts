@@ -13,7 +13,7 @@ import { environment } from '../../../environments/environment';
 })
 export class UsersService {
 
-  private api = `${environment.apiUrl}/users`;
+  private api = `${environment.apiUrl}/api/users`;
 
   constructor(private http: HttpClient) {}
 
@@ -27,7 +27,7 @@ export class UsersService {
    * @param id - ID numérico del usuario (extraído del JWT).
    * @returns Observable con el objeto de usuario: nombre, email, documento, teléfono.
    */
-  getUser(id: number) {
+  getUser(id: string) {
     return this.http.get(`${this.api}/${id}`, {
       headers: {
         'Cache-Control': 'no-cache'
@@ -42,7 +42,7 @@ export class UsersService {
    * @param data - Objeto con los campos a modificar: nombre, email, documento, teléfono.
    * @returns Observable con el objeto de usuario actualizado devuelto por el servidor.
    */
-  updateUser(id: number, data: any) {
+  updateUser(id: string, data: any) {
     return this.http.put(`${this.api}/${id}`, data);
   }
 }

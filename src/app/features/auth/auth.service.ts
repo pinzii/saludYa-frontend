@@ -47,6 +47,7 @@ export class AuthService {
    */
   logout() {
     localStorage.removeItem('token');
+    localStorage.removeItem('userId'); // Limpiamos también el ID
   }
 
   /**
@@ -72,14 +73,27 @@ export class AuthService {
    *
    * @returns El ID numérico del usuario, o `null` si el token no existe o es inválido.
    */
-  getUserIdFromToken(): number | null {
+  getUserIdFromToken(): string | null {
     const token = localStorage.getItem('token');
     if (!token) return null;
 
     try {
+      // Decodificamos el payload del JWT
       const payload = JSON.parse(atob(token.split('.')[1]));
-      return payload.sub;
+      
+      // Imprimimos el contenido del token para estar 100% seguros de qué llaves tiene
+      console.log('Payload decodificado del JWT:', payload);
+
+      // NestJS suele guardar el ID en 'sub'. Lo convertimos a String por seguridad.
+      if (payload.sub) {
+        return String(payload.sub);
+      } else if (payload.id) { // Por si acaso tu backend lo guardó como 'id'
+        return String(payload.id);
+      }
+      
+      return null;
     } catch (error) {
+      console.error('Error decodificando el token:', error);
       return null;
     }
   }

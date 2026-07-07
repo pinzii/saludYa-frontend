@@ -13,7 +13,7 @@ import { AuthService } from '../../auth/auth.service';
 export class PerfilComponent {
 
   
-  id!: number;
+  id!: string;
 
   form = {
     nombre: '',
